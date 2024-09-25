@@ -1,9 +1,9 @@
 Capstone Project: Online Instruments Sales Platform
 
-Group 5:
-Xiao Su 2097658
-Angran Li 2097002
-Dongye Liu 2075960
+Group 5:  
+Xiao Su 2097658  
+Angran Li 2097002  
+Dongye Liu 2075960  
 
 
 Our primary goal is to build a fully functional shopping platform with a user-friendly front-end page that enhances the experience of ordering musical instruments. 
