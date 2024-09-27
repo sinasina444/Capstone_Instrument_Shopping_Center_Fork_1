@@ -19,11 +19,11 @@ public class Instrument {
     @JsonIgnoreProperties(ignoreUnknown = true)
     String name;
 
-    @Column(name="category")
+    @Column(name="category",nullable=false)
     @JsonIgnoreProperties(ignoreUnknown = true)
     String category;
 
-    @Column(name="brand")
+    @Column(name="brand",nullable=false)
     @JsonIgnoreProperties(ignoreUnknown = true)
     String brand;
 
@@ -43,6 +43,10 @@ public class Instrument {
     @JsonIgnoreProperties(ignoreUnknown = true)
     String imageURL;
 
+    @Column(name="audioURL")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    String audioURL;
+
     @Column(name="stockQuantity")
     @JsonIgnoreProperties(ignoreUnknown = true)
     int stockQuantity;
@@ -51,4 +55,11 @@ public class Instrument {
     @JsonIgnoreProperties(ignoreUnknown = true)
     double rating;
 
+    public Instrument() {}
+
+    public Instrument(String name, String brand, String category) {
+        this.name = name;
+        this.brand = brand;
+        this.category = category;
+    }
 }

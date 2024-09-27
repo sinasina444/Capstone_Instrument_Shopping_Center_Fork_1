@@ -22,8 +22,7 @@ public class UserInfoController {
     @GetMapping("/getUserInfoList")
     public List<UserInfo> getUserInfoList() {
         userInfoService.addRandomUserInfo();
-        List<UserInfo> userInfoList = userInfoService.getAllUserInfo();
-        return userInfoList;
+        return userInfoService.getAllUserInfo();
     }
 
 }
