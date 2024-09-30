@@ -16,8 +16,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     static final int RANDOM_LEN = 6;
     static final SecureRandom RANDOM = new SecureRandom();
 
+
+    private final UserInfoRepository userInfoRepository;
+
     @Autowired
-    UserInfoRepository userInfoRepository;
+    public UserInfoServiceImpl(UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
+    }
 
     @Override
     public List<UserInfo> getAllUserInfo() {
