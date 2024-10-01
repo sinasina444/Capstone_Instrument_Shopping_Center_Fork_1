@@ -1,7 +1,6 @@
 package com.fdu.capstone_instrument_shopping_center.controllers;
 
 import com.fdu.capstone_instrument_shopping_center.entity.Instrument;
-import com.fdu.capstone_instrument_shopping_center.entity.UserInfo;
 import com.fdu.capstone_instrument_shopping_center.repositories.InstrumentRepository;
 import com.fdu.capstone_instrument_shopping_center.response.InstrumentListResponse;
 import com.fdu.capstone_instrument_shopping_center.response.InstrumentResponse;
