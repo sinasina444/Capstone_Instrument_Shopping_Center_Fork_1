@@ -26,6 +26,15 @@ public class UserInfo {
     String email;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @Column(name="enabled", nullable = false)
+    Boolean enabled;
+
+    // role: admin, customer, seller
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Column(name="role", nullable = false)
+    String role;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Column(name="address")
     String address;
 
@@ -35,10 +44,12 @@ public class UserInfo {
 
     public UserInfo(){};
 
-    public UserInfo(String username, String password, String email) {
+    public UserInfo(String username, String password, String email, Boolean enabled, String role) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.enabled = enabled;
+        this.role = role;
     }
 
 }

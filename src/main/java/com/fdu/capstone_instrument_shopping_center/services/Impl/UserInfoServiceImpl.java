@@ -33,7 +33,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     public void addRandomUserInfo() {
         String randomString = UUID.randomUUID().toString().substring(0,6);
         String emailString = randomString + "@gmail.com";
-        UserInfo userInfo = new UserInfo(randomString, randomString, emailString);
+        Boolean enabled = true;
+        String role = "customer";
+        UserInfo userInfo = new UserInfo(randomString, randomString, emailString, enabled, role);
         userInfoRepository.save(userInfo);
     }
 
