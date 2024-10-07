@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 @Slf4j
 public class JwtUtil {
     private final String SECRET_KEY = base64KeyGenerator();
@@ -46,13 +48,26 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Claims claims = extractAllClaims(token);
-            // check if token has expired
             if(claims.isEmpty()) {
                 return false;
             }
-            return !claims.getExpiration().before(new Date());
+            String role = extractRole(token);
+            if(role.isEmpty()) {
+                return false;
+            }
+            if(!(role.equals("admin") || role.equals("customer") || role.equals("seller"))) {
+                return false;
+            }
+            // check if token has expired
+            if(claims.getExpiration().before(new Date())) {
+                return false;
+            }
+            return true;
         } catch (ExpiredJwtException e) {
-            log.warn("Token validation failed, Expired JWT Token.");
+            log.error("Token validation failed, Expired JWT Token : {}.", e.getMessage());
+            return false;
+        } catch (Exception e) {
+            log.error("Token validation fail: {}.", e.getMessage());
             return false;
         }
     }
