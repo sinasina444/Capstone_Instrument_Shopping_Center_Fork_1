@@ -59,7 +59,7 @@ public class JwtUtil {
                 return false;
             }
             // check if token has expired
-            if(claims.getExpiration().before(new Date())) {
+            if(isTokenExpired(token)) {
                 return false;
             }
             return true;
