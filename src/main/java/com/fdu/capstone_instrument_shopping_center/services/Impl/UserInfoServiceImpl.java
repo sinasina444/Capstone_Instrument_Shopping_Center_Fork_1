@@ -24,12 +24,15 @@ public class UserInfoServiceImpl implements UserInfoService {
     static final int RANDOM_LEN = 6;
     static final SecureRandom RANDOM = new SecureRandom();
 
-    @Autowired
     private final UserInfoRepository userInfoRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserInfoServiceImpl(UserInfoRepository userInfoRepository) {
+    public UserInfoServiceImpl(UserInfoRepository userInfoRepository,
+                               PasswordEncoder passwordEncoder) {
         this.userInfoRepository = userInfoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new RuntimeException("Username already exists!");
         }
         UserInfo userInfo = new UserInfo(userDetailDto.getUsername(),
-                userDetailDto.getPassword(),
+                passwordEncoder.encode(userDetailDto.getPassword()),
                 userDetailDto.getRole());
         userInfo.setAddress(userDetailDto.getAddress());
         userInfo.setRole(userDetailDto.getRole());

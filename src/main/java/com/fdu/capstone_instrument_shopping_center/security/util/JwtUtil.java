@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,12 @@ import java.util.Map;
 @Component
 @Slf4j
 public class JwtUtil {
-    private final String SECRET_KEY = base64KeyGenerator();
+
+    private final String SECRET_KEY = "qgaY2kBoCHKxxE4HuKCBkNL3SLQSfxqqxvJb/8w41IGi99/A0WXBxGIWGcOWQ6LXp10eZuQUf7WOYVBBL1+H+Q==";
+
+    private final String ROLE_ADMIN = "ROLE_ADMIN";
+    private final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
+    private final String ROLE_SELLER = "ROLE_SELLER";
 
     private SecretKey getSignSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -32,13 +38,13 @@ public class JwtUtil {
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000*60*60*24)) // set 24 hours expiration time
-                .signWith(getSignSecretKey())
+                .signWith(getSignSecretKey(), io.jsonwebtoken.SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSignSecretKey())
+                .setSigningKey(getSignSecretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody(); // retrieve JWT Body 'claims'
@@ -48,28 +54,22 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Claims claims = extractAllClaims(token);
-            if(claims.isEmpty()) {
-                return false;
-            }
             String role = extractRole(token);
-            if(role.isEmpty()) {
+
+            if (role == null || !(role.equals(ROLE_ADMIN) || role.equals(ROLE_CUSTOMER) || role.equals(ROLE_SELLER))) {
                 return false;
             }
-            if(!(role.equals("admin") || role.equals("customer") || role.equals("seller"))) {
-                return false;
-            }
-            // check if token has expired
-            if(isTokenExpired(token)) {
-                return false;
-            }
-            return true;
+            return !isTokenExpired(token);
         } catch (ExpiredJwtException e) {
             log.error("Token validation failed, Expired JWT Token : {}.", e.getMessage());
             return false;
+        } catch (SignatureException e) {
+            log.error("Invalid JWT signature: {}.", e.getMessage());
         } catch (Exception e) {
             log.error("Token validation fail: {}.", e.getMessage());
             return false;
         }
+        return false;
     }
 
     String base64KeyGenerator() {
