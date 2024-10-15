@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class Response {
 
-    private boolean success;
-    private int code;
-    private String message;
+    protected boolean success;
+    protected int code;
+    protected String message;
 
     public Response() {
         super();

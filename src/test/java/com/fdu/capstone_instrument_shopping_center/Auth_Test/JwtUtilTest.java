@@ -49,4 +49,11 @@ public class JwtUtilTest {
         log.info("Test: Claims role {}, user {}, issueAt {}, issueExpires {}.",
                 claims.get("role"), claims.getSubject(), claims.getIssuedAt(), claims.getExpiration());
     }
+
+    @Test
+    void base64KeyGenerator() {
+        SecretKey key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS512);
+        String base64Key = Base64.getEncoder().encodeToString(key.getEncoded());
+        log.info("Generated base64 Key: " + base64Key);
+    }
 }
