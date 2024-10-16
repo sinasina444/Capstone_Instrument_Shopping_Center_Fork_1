@@ -26,10 +26,14 @@ public class SecurityConfig {
     private final UserInfoService userInfoService;
     private final JwtUtil jwtUtil;
 
+    private final WebConfig webConfig;
+
     @Autowired
-    public SecurityConfig (@Lazy UserInfoService userInfoService, JwtUtil jwtUtil) {
+    public SecurityConfig (@Lazy UserInfoService userInfoService, JwtUtil jwtUtil,
+                           WebConfig webConfig) {
         this.userInfoService = userInfoService;
         this.jwtUtil = jwtUtil;
+        this.webConfig = webConfig;
     }
 
     // Permit all requests and disable csrf protection
@@ -47,6 +51,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(webConfig.corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
