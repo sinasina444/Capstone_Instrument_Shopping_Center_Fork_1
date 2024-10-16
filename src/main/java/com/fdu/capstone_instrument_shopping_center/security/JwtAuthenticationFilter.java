@@ -4,6 +4,7 @@ import com.fdu.capstone_instrument_shopping_center.configuration.SecurityConfig;
 import com.fdu.capstone_instrument_shopping_center.entity.UserInfo;
 import com.fdu.capstone_instrument_shopping_center.security.util.JwtUtil;
 import com.fdu.capstone_instrument_shopping_center.services.UserInfoService;
+import io.micrometer.core.instrument.config.validate.ValidationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
+
+import javax.security.auth.login.CredentialException;
 
 @Component
 @Slf4j
@@ -49,23 +52,21 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 username = jwtUtil.extractUsername(token);
                 if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserInfo userInfo = userInfoService.findUserInfoByUsername(username);
-                    if(jwtUtil.validateToken(token) && userInfo.getUsername().equals(username)) {
-                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                                = new UsernamePasswordAuthenticationToken(userInfo.getUsername(),
-                                null, null);
+                    if(userInfo.getUsername().equals(username)) {
+                        boolean isUserExist = userInfoService.userExistByUsername(username);
+                        if(isUserExist) {
+                            log.info("User {} exist in DB.", username);
+                            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
+                                    = new UsernamePasswordAuthenticationToken(userInfo.getUsername(),
+                                    null, null);
 
-                        // set authentication result into Security context holder
-                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                            // set authentication result into Security context holder
+                            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                        } else {
+                            log.warn("User {} does not exist.", username);
+                            throw new RuntimeException("Username does not exist.");
+                        }
                     }
-                }
-                boolean isUserExist = userInfoService.userExistByUsername(username);
-                if(isUserExist) {
-                    log.info("User {} exist.", username);
-                    UsernamePasswordAuthenticationToken authenticationToken
-                            = new UsernamePasswordAuthenticationToken(username, null, null);
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                } else {
-                    log.info("User {} does not exist.", username);
                 }
             }
         }
