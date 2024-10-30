@@ -6,7 +6,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -17,15 +20,22 @@ import java.util.Map;
 
 @Component
 @Slf4j
+@Setter
+@Getter
 public class JwtUtil {
 
-    private final String SECRET_KEY = "qgaY2kBoCHKxxE4HuKCBkNL3SLQSfxqqxvJb/8w41IGi99/A0WXBxGIWGcOWQ6LXp10eZuQUf7WOYVBBL1+H+Q==";
+//    private final String SECRET_KEY = "qgaY2kBoCHKxxE4HuKCBkNL3SLQSfxqqxvJb/8w41IGi99/A0WXBxGIWGcOWQ6LXp10eZuQUf7WOYVBBL1+H+Q==";
+    @Value("${jwt.secret.key}")
+    private  String SECRET_KEY;
 
     private final String ROLE_ADMIN = "ROLE_ADMIN";
     private final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
     private final String ROLE_SELLER = "ROLE_SELLER";
 
     private SecretKey getSignSecretKey() {
+        if (SECRET_KEY == null) {
+            throw new IllegalStateException("SECRET_KEY is not initialized. Check configuration.");
+        }
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes); // HMAC-SHA sign
     }
