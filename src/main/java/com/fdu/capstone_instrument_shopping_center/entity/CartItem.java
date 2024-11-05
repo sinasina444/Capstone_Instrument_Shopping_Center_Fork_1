@@ -22,15 +22,13 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instrument_id", nullable = false)
+    private Instrument instrument;
 
-    @Column(nullable = false)
-    private String productName;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "shopping_cart_id")
-//    private ShoppingCart shoppingCart;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopping_cart_id")
+    private ShoppingCart shoppingCart;
 
     public BigDecimal getTotalPrice() {
         return unitPrice.multiply(BigDecimal.valueOf(quantity));

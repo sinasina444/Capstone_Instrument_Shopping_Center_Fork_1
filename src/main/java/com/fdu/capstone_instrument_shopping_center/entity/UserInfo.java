@@ -49,6 +49,10 @@ public class UserInfo implements UserDetails {
     @Column(name="phoneNumber")
     String phoneNumber;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    private ShoppingCart shoppingCart;
+
     public UserInfo(){};
 
     public UserInfo(String username, String password, String role) {
