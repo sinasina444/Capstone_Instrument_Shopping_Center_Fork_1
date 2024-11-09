@@ -1,5 +1,6 @@
 package com.fdu.capstone_instrument_shopping_center.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -51,6 +52,7 @@ public class UserInfo implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    @JsonIgnore
     private ShoppingCart shoppingCart;
 
     public UserInfo(){};

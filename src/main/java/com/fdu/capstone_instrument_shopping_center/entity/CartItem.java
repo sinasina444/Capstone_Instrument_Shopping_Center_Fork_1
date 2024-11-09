@@ -1,5 +1,7 @@
 package com.fdu.capstone_instrument_shopping_center.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,12 +24,13 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "instrument_id", nullable = false)
     private Instrument instrument;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopping_cart_id")
+    @JsonIgnore
     private ShoppingCart shoppingCart;
 
     public BigDecimal getTotalPrice() {

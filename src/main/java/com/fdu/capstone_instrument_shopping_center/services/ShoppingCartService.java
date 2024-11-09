@@ -5,11 +5,13 @@ import com.fdu.capstone_instrument_shopping_center.entity.ShoppingCart;
 
 public interface ShoppingCartService {
 
-    public ShoppingCart addItemToCart(Long userId, Instrument instrument, int quantity);
+    public ShoppingCart addItemToCart(String username, Instrument instrument, int quantity);
 
     public ShoppingCart removeItemFromCart(Long userId, Long itemId);
 
     public ShoppingCart getShoppingCartByUserId(Long userId);
+
+    public ShoppingCart getShoppingCartByUserName(String username);
 
     public void clearCart(Long userId);
 
