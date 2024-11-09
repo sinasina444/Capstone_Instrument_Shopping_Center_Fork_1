@@ -30,7 +30,12 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Instrument addNewInstrument(Instrument instrument) {
-        return instrumentRepository.save(instrument);
+        try {
+            return instrumentRepository.save(instrument);
+        } catch (RuntimeException e) {
+            log.error("Failed to save the instrument: {}.", e.getMessage());
+            throw new RuntimeException("Failed to save the instrument: {}", e);
+        }
     }
 
     @Override
@@ -43,6 +48,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         instrument.setStockQuantity(0);
         instrument.setRating(0.0);
         instrument.setImageURL(UNKNOWN);
+        instrument.setDetail(UNKNOWN);
         return instrument;
     }
 

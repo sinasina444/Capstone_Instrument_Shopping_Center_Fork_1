@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -14,6 +16,9 @@ public class Instrument {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @Column(name = "sku", unique = true, nullable = false)
+    private String sku;
 
     @Column(name="name",nullable=false)
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,6 +39,10 @@ public class Instrument {
     @Column(name="description")
     @JsonIgnoreProperties(ignoreUnknown = true)
     String description;
+
+    @Column(name="detail", length = 1000)
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    String detail;
 
     @Column(name="material")
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -61,5 +70,10 @@ public class Instrument {
         this.name = name;
         this.brand = brand;
         this.category = category;
+    }
+
+    @PrePersist
+    public void generateSku() {
+        this.sku = UUID.randomUUID().toString();
     }
 }
