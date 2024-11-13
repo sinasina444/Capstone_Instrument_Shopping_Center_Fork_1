@@ -49,7 +49,7 @@ public class UserController {
             // generate JWT Token
             jwt = jwtUtil.generateToken(userInfo.getUsername(), authenticationRequest.getRole());
             // return jwt token to client
-            return new AuthenticationResponse(true, "User: " + userInfo.getUsername() + "Success.", jwt, userInfo.getRole());
+            return new AuthenticationResponse(true, String.valueOf(userInfo.getId()), jwt, userInfo.getRole());
         } else {
             return new AuthenticationResponse(false, "UserInfo is empty.");
         }

@@ -9,11 +9,15 @@ public interface ShoppingCartService {
 
     public ShoppingCart removeItemFromCart(Long userId, Long itemId);
 
+    public ShoppingCart removeItemFromCartBySkuAndUserId(Long userId, String sku);
+
     public ShoppingCart getShoppingCartByUserId(Long userId);
 
     public ShoppingCart getShoppingCartByUserName(String username);
 
     public void clearCart(Long userId);
+
+    public void clearCart(String username);
 
 
 }

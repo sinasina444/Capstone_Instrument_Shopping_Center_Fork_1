@@ -113,19 +113,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    public ShoppingCart removeItemFromCartBySkuAndUserId(Long userId, String sku) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByInstrumentSkuAndUserId(sku,userId);
+        if(shoppingCart == null) {
+            log.error("Instrument sku or user id is invalid , Please check sku and user id.");
+            throw new RuntimeException("Instrument sku or user id is invalid.");
+        }
+        CartItem cartItem = cartItemRepository.findByInstrumentSkuAndUserId(sku,userId);
+        if(cartItem == null) {
+            log.error("Instrument sku or user id is invalid while get cart item , Please check sku and user id.");
+            throw new RuntimeException("Instrument sku or user id is invalid when retrieving cart item.");
+        }
+        shoppingCart.getCartItems().removeIf(item -> item.getId().equals(cartItem.getId()));
+        return shoppingCartRepository.save(shoppingCart);
+    }
+
+    @Override
     public ShoppingCart getShoppingCartByUserId(Long userId) {
         return shoppingCartRepository.findByUserInfoId(userId);
     }
 
     @Override
     public ShoppingCart getShoppingCartByUserName(String username) {
-        Optional<UserInfo> optionalUserInfo = userInfoRepository.findUserInfoByUsername(username);
-        if(optionalUserInfo.isEmpty()) {
-            log.error("Username is invalid , failed to get shopping cart info.");
-            throw new RuntimeException("Username is invalid , failed to get shopping cart info.");
-        }
-        UserInfo userInfo = optionalUserInfo.get();
-        Long userId = userInfo.getId();
+        Long userId = findUserIdByUserName(username);
         return shoppingCartRepository.findByUserInfoId(userId);
     }
 
@@ -136,5 +146,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart.getCartItems().clear();
             shoppingCartRepository.save(shoppingCart);
         }
+    }
+
+    @Override
+    public void clearCart(String username) {
+        Long userId = findUserIdByUserName(username);
+        clearCart(userId);
+    }
+
+    public Long findUserIdByUserName(String username) {
+        Optional<UserInfo> optionalUserInfo = userInfoRepository.findUserInfoByUsername(username);
+        if(optionalUserInfo.isEmpty()) {
+            log.error("Username is invalid , Please check username.");
+            throw new RuntimeException("Username is invalid.");
+        }
+        UserInfo userInfo = optionalUserInfo.get();
+        return userInfo.getId();
     }
 }

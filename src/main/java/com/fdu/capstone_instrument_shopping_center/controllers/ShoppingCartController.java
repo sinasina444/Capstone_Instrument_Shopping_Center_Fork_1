@@ -34,6 +34,12 @@ public class ShoppingCartController {
         return shoppingCartService.removeItemFromCart(userId, itemId);
     }
 
+    @DeleteMapping("/removeItemBySku")
+    public ShoppingCart removeItemFromShoppingCart(@RequestParam Long userId,
+                                                   @RequestParam String sku) {
+        return shoppingCartService.removeItemFromCartBySkuAndUserId(userId, sku);
+    }
+
     @GetMapping("/getShoppingCartById")
     public ShoppingCart getShoppingCartById(@RequestParam Long userId) {
         return shoppingCartService.getShoppingCartByUserId(userId);
@@ -44,8 +50,13 @@ public class ShoppingCartController {
         return shoppingCartService.getShoppingCartByUserName(username);
     }
 
-    @DeleteMapping("/clearShoppingCart")
+    @DeleteMapping("/clearShoppingCartById")
     public void clearShoppingCart(@RequestParam Long userId) {
         shoppingCartService.clearCart(userId);
+    }
+
+    @DeleteMapping("/clearShoppingCart")
+    public void clearShoppingCart(@RequestParam String username) {
+        shoppingCartService.clearCart(username);
     }
 }
