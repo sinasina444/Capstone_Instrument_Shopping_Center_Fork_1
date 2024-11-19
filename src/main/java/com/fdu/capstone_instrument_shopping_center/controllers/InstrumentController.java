@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/Instrument")
@@ -40,6 +41,16 @@ public class InstrumentController {
     public Response addInstrument(@RequestBody Instrument instrument) {
         instrumentService.addNewInstrument(instrument);
         return new InstrumentResponse(true, instrument);
+    }
+
+    @GetMapping("/getInstrumentBySku")
+    public Response getInstrumentBySku(@RequestBody String sku) {
+        Optional<Instrument> optionalInstrument = instrumentRepository.findBySku(sku);
+        if(optionalInstrument.isEmpty()) {
+            log.info("Cannot find instrument by sku. Please check if sku is valid.");
+            return new Response(false);
+        }
+        return new InstrumentResponse(true, optionalInstrument.get());
     }
 
 
