@@ -49,5 +49,39 @@ public class UserProfileController {
         }
         return new Response(false, "Failed to retrieve UserInfo by Username.");
     }
+
+    @PostMapping("/updateUserInfo")
+    public Response updateUserInfo(@RequestBody UserInfoDto userInfoDto) {
+        log.info("Updating user info");
+        if (userInfoDto.getUsername() == null || userInfoDto.getUsername().isEmpty()) {
+            return new Response(false, "Failed to retrieve username in updateUserInfo request.");
+        }
+
+        // Retrieve user info from the database
+        UserInfo userInfo = userInfoService.findUserInfoByUsername(userInfoDto.getUsername());
+        if (userInfo == null) {
+            return new Response(false, "User not found for the provided username.");
+        }
+
+        // Update fields if provided in the request
+        if (userInfoDto.getEmail() != null && !userInfoDto.getEmail().isEmpty()) {
+            userInfo.setEmail(userInfoDto.getEmail());
+        }
+        if (userInfoDto.getAddress() != null && !userInfoDto.getAddress().isEmpty()) {
+            userInfo.setAddress(userInfoDto.getAddress());
+        }
+        if (userInfoDto.getPhoneNumber() != null && !userInfoDto.getPhoneNumber().isEmpty()) {
+            userInfo.setPhoneNumber(userInfoDto.getPhoneNumber());
+        }
+
+        // Save updated info back to the database
+        try {
+            userInfoService.saveUserInfo(userInfo);
+            return new Response(true, "User information updated successfully.");
+        } catch (Exception e) {
+            log.error("Error updating user info", e);
+            return new Response(false, "An error occurred while updating user information.");
+        }
+    }
 }
 

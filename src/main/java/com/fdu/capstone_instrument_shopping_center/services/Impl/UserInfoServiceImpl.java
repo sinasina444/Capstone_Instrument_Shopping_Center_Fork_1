@@ -62,6 +62,15 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
+    public void saveUserInfo(UserInfo userInfo) {
+        try {
+            userInfoRepository.save(userInfo);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving user information: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
     public UserInfo register(UserInfoDto userDetailDto) {
         if(userInfoRepository.findUserInfoByUsername(userDetailDto.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists!");

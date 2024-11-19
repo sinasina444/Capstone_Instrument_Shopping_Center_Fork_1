@@ -20,4 +20,5 @@ public interface UserInfoService extends UserDetailsService {
 
     public UserInfo register(UserInfoDto userInfoDto);
 
+    void saveUserInfo(UserInfo userInfo);
 }
