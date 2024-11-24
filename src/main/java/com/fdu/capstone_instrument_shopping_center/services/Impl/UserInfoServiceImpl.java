@@ -1,6 +1,5 @@
 package com.fdu.capstone_instrument_shopping_center.services.Impl;
 
-import com.fdu.capstone_instrument_shopping_center.dto.UserDetailDto;
 import com.fdu.capstone_instrument_shopping_center.dto.UserInfoDto;
 import com.fdu.capstone_instrument_shopping_center.entity.UserInfo;
 import com.fdu.capstone_instrument_shopping_center.repositories.UserInfoRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
