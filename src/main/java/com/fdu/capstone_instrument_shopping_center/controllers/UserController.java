@@ -1,19 +1,19 @@
 package com.fdu.capstone_instrument_shopping_center.controllers;
 
 import com.fdu.capstone_instrument_shopping_center.Request.AuthenticationRequest;
-import com.fdu.capstone_instrument_shopping_center.dto.UserDetailDto;
 import com.fdu.capstone_instrument_shopping_center.dto.UserInfoDto;
 import com.fdu.capstone_instrument_shopping_center.entity.UserInfo;
 import com.fdu.capstone_instrument_shopping_center.response.AuthenticationResponse;
-import com.fdu.capstone_instrument_shopping_center.response.Response;
 import com.fdu.capstone_instrument_shopping_center.security.util.JwtUtil;
 import com.fdu.capstone_instrument_shopping_center.services.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/User")

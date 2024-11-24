@@ -29,8 +29,8 @@ public class SecurityConfig {
     private final WebConfig webConfig;
 
     @Autowired
-    public SecurityConfig (@Lazy UserInfoService userInfoService, JwtUtil jwtUtil,
-                           WebConfig webConfig) {
+    public SecurityConfig(@Lazy UserInfoService userInfoService, JwtUtil jwtUtil,
+                          WebConfig webConfig) {
         this.userInfoService = userInfoService;
         this.jwtUtil = jwtUtil;
         this.webConfig = webConfig;
