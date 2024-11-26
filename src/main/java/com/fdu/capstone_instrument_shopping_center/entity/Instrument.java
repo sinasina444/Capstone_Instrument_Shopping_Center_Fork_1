@@ -36,7 +36,7 @@ public class Instrument {
     @JsonIgnoreProperties(ignoreUnknown = true)
     Double price;
 
-    @Column(name="description")
+    @Column(name="description", length = 1000)
     @JsonIgnoreProperties(ignoreUnknown = true)
     String description;
 
