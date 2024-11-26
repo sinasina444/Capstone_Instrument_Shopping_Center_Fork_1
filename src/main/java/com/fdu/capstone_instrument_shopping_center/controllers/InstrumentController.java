@@ -44,7 +44,7 @@ public class InstrumentController {
     }
 
     @GetMapping("/getInstrumentBySku")
-    public Response getInstrumentBySku(@RequestBody String sku) {
+    public Response getInstrumentBySku(@RequestParam(value = "sku") String sku) {
         Optional<Instrument> optionalInstrument = instrumentRepository.findBySku(sku);
         if(optionalInstrument.isEmpty()) {
             log.info("Cannot find instrument by sku. Please check if sku is valid.");
