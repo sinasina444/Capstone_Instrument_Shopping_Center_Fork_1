@@ -28,4 +28,8 @@ public class DatabaseConnectionTest {
         }
     }
 
+    @Test
+    public void checkEnvironmentVariable() {
+        System.out.println("JWT_SECRET_KEY: " + System.getenv("JWT_SECRET_KEY"));
+    }
 }
